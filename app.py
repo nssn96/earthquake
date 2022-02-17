@@ -5,6 +5,7 @@ from flask import Flask, render_template, request,url_for,flash
 import mysql.connector as mysql
 
 app = Flask(__name__)
+app.secret_key = 'random string'
 
 #DB connection details
 HOST='utacloud1.reclaimhosting.com'
@@ -37,11 +38,25 @@ def largestN(fields):
     cursor = conn.cursor()
     for key,value in fields.items():
         query+="order by mag desc LIMIT 0,"+value
+        #query+="where mag > "+value+" order by mag desc"
     print(query)
     cursor.execute(query)
     res = cursor.fetchall()
     conn.close()
     return res
+
+def dateRange(fields):
+    query=mainQuery
+    dbConnect()
+    cursor = conn.cursor()
+    query+=" where DATE(time)>='"+fields['From']+"' and Date(time)<='"+fields['To']+"' and mag>"+fields['Mag']
+    print(query)
+    cursor.execute(query)
+    res = cursor.fetchall()
+    conn.close()
+    return res
+
+
 
     
         
@@ -55,7 +70,6 @@ def index():
 
 @app.route('/search',methods=['GET','POST'])
 def search():
-    dbConnect()
     if request.method=='POST':
         dic={}
         for key,value in request.form.items():
@@ -70,6 +84,28 @@ def search():
         result = allData()
 
     return render_template('index.html', data=result)
+
+@app.route('/date', methods=['GET','POST'])
+def date():
+    if request.method=='POST':
+        dic={}
+        result=[]
+        for key,value in request.form.items():
+            if value!='':
+                dic[key] = value
+        
+        #print(dic)
+        if dic:
+            result = dateRange(dic)
+        else:
+            flash('Please enter values in fields')
+        
+        if result==[]:
+            flash ('No Such entries in table')
+        
+    
+    return render_template('index.html', data=result)
+
 
 
 

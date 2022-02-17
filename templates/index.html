@@ -11,26 +11,38 @@
     <h2>Surya Narayanan N S</h2>
     <h2>UTA ID : 1001877873</h2>
 
-
+<p><b>To search the largest N quakes occured</b></p>
     <form action="/search" method="post">
         <table>
-        <tr>
-            <td><label for ="count">count </label></td>
-            <td><input type="text" id="Count" name="Count"></td>
-          </tr>
-        
-
+            <tr>
+                <td><label for ="num">NUM(N) </label></td>
+                <td><input type="text" id="Num" name="Num"></td>
+                <td><input type="submit" value="SEARCH"></td>
+            </tr>
         </table>
-    </br>
-        <input type="submit" value="SEARCH">
-        </form>
-    </br> </br>
+    </form> 
 
-    <a href="/search">
+  <p><b>To search the quakes occured in a date range and required mag scale(>N)</b></p>
+    <form action="/date" method="post">
+        <table>
+            <tr>
+                <td><label for="From">From:</label> </td> 
+                <td> <input type="date" id="From" name="From"></td>
+                <td><label for="">To:</label></td>
+                <td><input type="date" id="To" name="To"></td>
+                <td><label for ="mag">Mag scale </label></td>
+                <td><input type="text" id="Mag" name="Mag"></td>
+                <td> <input type="submit" value="SEARCH"></td>
+            </tr>
+        </table>
+    </form>
+    
+
+    <!-- <a href="/search">
         <button>All Data</button>
-      </a> 
+      </a>  -->
 
-
+    </br> </br>
       {% if data %}
 
       <table border=1>
