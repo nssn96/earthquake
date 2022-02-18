@@ -36,6 +36,18 @@
             </tr>
         </table>
     </form>
+
+    <p><b>To group the earthquakes by mag scale for past N days</b></p>
+    <form action="/groupby" method="post">
+        <table>
+            <tr>
+                <td><label for ="days">N days </label></td>
+                <td><input type="text" id="days" name="days"></td>
+                <td><input type="submit" value="SEARCH"></td>
+            </tr>
+        </table>
+
+    </form>
     
 
     <!-- <a href="/search">
@@ -115,9 +127,30 @@
       {% endif %}
    {% endwith %}
 
+{% endif %}
+
+{% if data2 %}
+<table border=1>
+    <tr>
+        <th>Magnitude_range</th>
+        <th>Number of occurences</th>
+    </tr>
+    {% for value in data2 %}
+    <tr>
+        <td>{{ value[0] }}</td>
+        <td>{{ value[1] }}</td>
+    </tr>
+
+    {% endfor %}
 
 
-      {% endif %}
+</table>
+
+
+
+
+{% endif %}
+
     
 </body>
 </html>

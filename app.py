@@ -57,6 +57,24 @@ def dateRange(fields):
     return res
 
 
+def groupByMag(fields):
+    query = "select t.new as 'mag_range', count(*) as 'number_of_occurences' from ( "
+    query+="select case when mag>=1 and mag<2 then '1-2' "
+    query+="when mag>=2 and mag<3 then '2-3' when mag>=3 and mag<4 then '3-4' "
+    query+="when mag>=4 and mag<5 then '4-5' when mag>=5 and mag<6 then '5-6' "
+    query+="when mag>=6 and mag<7 then '6-7' else 'other(negatives)' end as new "
+    query+="from earthquake "
+    query+="where date(time)>=date(curdate()-"
+    query+=fields['days']+")"
+    query+=" ) t group by t.new"
+    dbConnect()
+    cursor = conn.cursor()
+    cursor.execute(query)
+    res = cursor.fetchall()
+    print(query)
+    print(res)
+    conn.close()
+    return res
 
     
         
@@ -73,17 +91,38 @@ def search():
     if request.method=='POST':
         dic={}
         for key,value in request.form.items():
-            dic[key]=value
+            if value!='':
+                dic[key]=value
+        
+        print(dic)
 
         if dic:
             result=largestN(dic)
         else:
+            result=[]
             flash('Please enter values in the field')
     
     else:
         result = allData()
 
     return render_template('index.html', data=result)
+
+@app.route('/groupby',methods=['POST','GET'])
+def groupBy():
+    if request.method=='POST':
+        dic={}
+        for key,value in request.form.items():
+            if value!='':
+                dic[key]=value
+
+        if dic:
+            result=groupByMag(dic)
+        else:
+            result=[]
+            flash('Please enter values in the field')
+
+        
+    return render_template('index.html',data2=result)
 
 @app.route('/date', methods=['GET','POST'])
 def date():
