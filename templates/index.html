@@ -48,6 +48,67 @@
         </table>
 
     </form>
+
+    <p><b>To get the lat long of a place</b></p>
+    <form action="/latlong" method="post">
+        <table>
+            <tr>
+                <td><label for ="location">Location </label></td>
+                <td><input type="text" id="location" name="location"></td>
+                <td><input type="submit" value="SEARCH"></td>
+            </tr>
+        </table>
+
+    </form>
+
+
+    <p><b>To get the name of location from Lat,Long</b></p>
+    <form action="/placename" method="post">
+        <table>
+            <tr>
+                <td><label for ="lat">Latitude </label></td>
+                <td><input type="text" id="lat" name="lat"></td>
+                <td><label for ="long">Longitude </label></td>
+                <td><input type="text" id="long" name="long"></td>
+                <td><input type="submit" value="SEARCH"></td>
+            </tr>
+        </table>
+
+    </form>
+
+    {% if loc %}
+    <table>
+        <tr>
+            <td>Address : </td>
+            <td>{{loc.address}}</td>
+        </tr>
+
+        
+        <tr>
+            <td>Latitude : </td>
+            <td>{{ loc.latitude}}</td>
+        </tr>
+        <tr>
+            <td>Longitude : </td>
+            <td>{{loc.longitude}}</td>
+        </tr>
+
+    </table>
+    {% endif %}
+
+    {% if place %}
+    <table>
+        <tr>
+            <td>Place Name : </td>
+            <td>{{ place['city'], place['state']}}</td>
+        </tr>
+        </table>
+
+    {% endif %}
+    
+
+
+
     
 
     <!-- <a href="/search">
