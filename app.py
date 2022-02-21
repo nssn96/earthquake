@@ -38,23 +38,25 @@ def allData():
     return res
 
 def largestN(fields):
-    # query=mainQuery
+    query=mainQuery
     # dbConnect()
     # cursor = conn.cursor()
     # for key,value in fields.items():
     #     query+="order by mag desc LIMIT 0,"+value
         
 
-    query = "Update earthquake SET gap="+fields['gap']+" where net='"+fields['net']+"'"
+    #query = "Update earthquake SET gap="+fields['gap']+" where net='"+fields['net']+"' and gap IS NULL"
+    query+=" where mag>="+fields['mag1']+" and mag<="+fields['mag2']+" and place like '%"+fields['place']+"%'"
     dbConnect()
     cursor = conn.cursor()
     flag=0
     print(query)
-    #executing the query
     cursor.execute(query)
-    #commiting the changes in DB
-    conn.commit()
+    res = cursor.fetchall()
     conn.close()
+    return res
+
+   
    
 
 def dateRange(fields):
