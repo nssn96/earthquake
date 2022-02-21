@@ -204,6 +204,50 @@
 
 {% endif %}
 
+{% if data3 %}
+
+      <table border=1>
+
+        <tr>
+            <th>time</th>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th>depth</th>
+            <th>magnitude</th>
+            <th>magType</th>
+            <th>place</th>
+            <th>distance</th>
+        </tr>
+
+        {% for value in data3 %}
+        <tr>
+            <td>{{ value[0] }}</td>
+            <td>{{ value[1] }}</td>
+            <td>{{ value[2] }}</td>
+            <td>{{ value[3] }}</td>
+            <td>{{ value[4] }}</td>
+            <td>{{ value[5] }}</td>
+            <td>{{ value[6] }}</td>
+            <td>{{ value[7] }}</td>
+        </tr>
+        
+        {% endfor %}
+         
+      
+      </table>
+
+      {% else %}
+
+      {% with msg = get_flashed_messages() %}
+      {% if msg %}
+         {% for info in msg %}
+            {{ info }}
+         {% endfor %}
+      {% endif %}
+   {% endwith %}
+
+{% endif %}
+
 {% if data2 %}
 <table border=1>
     <tr>
@@ -220,9 +264,6 @@
 
 
 </table>
-
-
-
 
 {% endif %}
 
