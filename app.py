@@ -63,7 +63,7 @@ def dateRange(fields):
     query=mainQuery
     dbConnect()
     cursor = conn.cursor()
-    query+=" where gap >="+fields['gap1']+" and gap<="+fields['gap2']+" and net='"+fields['net']+"'"
+    query+=" where magtype ='"+fields['type']+"' and net='"+fields['net']+"'"
     print(query)
     cursor.execute(query)
     res = cursor.fetchall()
