@@ -38,23 +38,30 @@ def allData():
     return res
 
 def largestN(fields):
-    query=mainQuery
+    # query=mainQuery
+    # dbConnect()
+    # cursor = conn.cursor()
+    # for key,value in fields.items():
+    #     query+="order by mag desc LIMIT 0,"+value
+        
+
+    query = "Update earthquake SET gap="+fields['gap']+" where net='"+fields['net']+"'"
     dbConnect()
     cursor = conn.cursor()
-    for key,value in fields.items():
-        query+="order by mag desc LIMIT 0,"+value
-        #query+="where mag > "+value+" order by mag desc"
+    flag=0
     print(query)
+    #executing the query
     cursor.execute(query)
-    res = cursor.fetchall()
+    #commiting the changes in DB
+    conn.commit()
     conn.close()
-    return res
+   
 
 def dateRange(fields):
     query=mainQuery
     dbConnect()
     cursor = conn.cursor()
-    query+=" where DATE(time)>='"+fields['From']+"' and Date(time)<='"+fields['To']+"' and mag>"+fields['Mag']
+    query+=" where gap >="+fields['gap1']+" and gap<="+fields['gap2']+" and net='"+fields['net']+"'"
     print(query)
     cursor.execute(query)
     res = cursor.fetchall()
@@ -242,6 +249,7 @@ def search():
 
         if dic:
             result=largestN(dic)
+            flash('updated successfully')
         else:
             result=[]
             flash('Please enter values in the field')
@@ -272,7 +280,7 @@ def groupBy():
         
     return render_template('index.html',data2=result)
 
-@app.route('/date', methods=['GET','POST'])
+@app.route('/dateRange', methods=['GET','POST'])
 def date():
     if request.method=='POST':
         dic={}
