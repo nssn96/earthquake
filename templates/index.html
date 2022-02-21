@@ -49,7 +49,22 @@
 
     </form>
 
-    <p><b>To get the lat long of a place</b></p>
+       <p><b>To get the earthquakes around a distance from a  place</b></p>
+    <form action="/distance" method="post">
+        <table>
+            <tr>
+                <td><label for ="location">Location </label></td>
+                <td><input type="text" id="location" name="location"></td>
+                <td><label for ="distance">Distance in km </label></td>
+                <td><input type="text" id="distance" name="distance"></td>
+
+                <td><input type="submit" value="SEARCH"></td>
+            </tr>
+        </table> 
+
+
+
+    <!-- <p><b>To get the lat long of a place</b></p>
     <form action="/latlong" method="post">
         <table>
             <tr>
@@ -59,10 +74,10 @@
             </tr>
         </table>
 
-    </form>
+    </form> -->
 
 
-    <p><b>To get the name of location from Lat,Long</b></p>
+    <!-- <p><b>To get the name of location from Lat,Long</b></p>
     <form action="/placename" method="post">
         <table>
             <tr>
@@ -74,7 +89,7 @@
             </tr>
         </table>
 
-    </form>
+    </form> -->
 
     {% if loc %}
     <table>
@@ -102,8 +117,7 @@
             <td>Place Name : </td>
             <td>{{ place['city'], place['state']}}</td>
         </tr>
-        </table>
-
+    </table>
     {% endif %}
     
 
