@@ -119,17 +119,11 @@
         </tr>
     </table>
     {% endif %}
-    
 
-
-
-    
-
-    <!-- <a href="/search">
-        <button>All Data</button>
-      </a>  -->
 
     </br> </br>
+
+    <!----------------------------------------------------------------for the other normal data--------->
       {% if data %}
 
       <table border=1>
@@ -203,7 +197,7 @@
    {% endwith %}
 
 {% endif %}
-
+<!----------------------------------------------------------------for the group data2--------->
 {% if data2 %}
 <table border=1>
     <tr>
@@ -220,11 +214,58 @@
 
 
 </table>
-
-
-
-
 {% endif %}
+
+
+<!----------------------------------------------------------------for the distance data3-------->
+{% if data3 %}
+{% if time3%}
+<p>Time taken for the query to run : {{time3}} secs</p>
+{% endif %}
+
+      <table border=1>
+
+        <tr>
+            <th>time</th>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th>depth</th>
+            <th>magnitude</th>
+            <th>magType</th>
+            <th>place</th>
+            <th>distance</th>
+        </tr>
+
+        {% for value in data3 %}
+        <tr>
+            <td>{{ value[0] }}</td>
+            <td>{{ value[1] }}</td>
+            <td>{{ value[2] }}</td>
+            <td>{{ value[3] }}</td>
+            <td>{{ value[4] }}</td>
+            <td>{{ value[5] }}</td>
+            <td>{{ value[6] }}</td>
+            <td>{{ value[7] }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+        {% else %}
+
+        {% with msg = get_flashed_messages() %}
+        {% if msg %}
+           {% for info in msg %}
+              {{ info }}
+           {% endfor %}
+        {% endif %}
+     {% endwith %}
+        
+       
+        {% endif %}
+         
+      
+     
 
     
 </body>

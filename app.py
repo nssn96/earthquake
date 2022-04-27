@@ -84,46 +84,32 @@ def groupByMag(fields):
 #https://www.themathdoctors.org/distances-on-earth-2-the-haversine-formula/#:~:text=To%20convert%20lon1%2Clat1%20and%20lon2%2Clat2%20from%20degrees%2C%20minutes%2C,Inverse%20trigonometric%20functions%20return%20results%20expressed%20in%20radians.
 #https://stackoverflow.com/questions/34262872/how-to-find-user-location-within-500-meters-from-given-lat-and-long-in-python
 #https://www.sisense.com/blog/latitude-longitude-distance-calculation-explained/#:~:text=One%20of%20the%20most%20common%20ways%20to%20calculate,of%20each%20to%20calculate%20the%20distance%20between%20points.
-def haversineCalc(lat1, long1, lat2, long2, earthRadius=6372.8):
-    #To calculate distance between two points using latitude and longitude
-    phi_Lat = radians(lat2 - decimal.Decimal(lat1))
-    phi_Long = radians(long2 - decimal.Decimal(long1))
-    lat1 = radians(lat1)
-    lat2 = radians(lat2)
 
-    a = (sin(phi_Lat/2)**2)+cos(lat1)*cos(lat2)*(sin(phi_Long/2)**2)
-    c = 2 * atan2(sqrt(a),sqrt(1-a))
-    return earthRadius * c
 
-def getDistance(fields):
-    id=[] # to store the unique id of the earthquakes within the distance specified
-    tableData = allData()
-    loc = getLatLong(fields['location'])
 
-    for i in tableData:
-        dist = haversineCalc(loc.latitude,loc.latitude,i[1],i[2])
-        if dist<float(fields['distance']):
-            print(dist)
-            id.append(i[11])
-    print(id)
-    return id
-
-def getDistanceData(id):
-    query= "Select * from earthquake where id IN ("
+def getDistanceData(fields):
+    #query= "Select * from earthquake where id IN ("
     dbConnect()
     cursor = conn.cursor()
-    flag=0
-    for value in id:
-        if flag>0:
-            query+=","
-        query+="'"+value+"'"
-        flag+=1
-    query+=")  order by mag desc "
+    # flag=0
+    # for value in id:
+    #     if flag>0:
+    #         query+=","
+    #     query+="'"+value+"'"
+    #     flag+=1
+    # query+=")  order by mag desc "
+
+    loc = getLatLong(fields['location'])
+    query= "SELECT time,latitude,longitude,depth,mag,magtype,place, (6371 * acos (cos ( radians("+str(loc.latitude)+") )* cos( radians( latitude ) )* cos( radians( longitude ) - radians("+str(loc.longitude)+") )+ sin ( radians("+str(loc.latitude)+") )* sin( radians( latitude ) ))) AS distance FROM earthquake where (6371 * acos (cos ( radians("+str(loc.latitude)+") )* cos( radians( latitude ) )* cos( radians( longitude ) - radians("+str(loc.longitude)+") )+ sin ( radians("+str(loc.latitude)+") )* sin( radians( latitude ) ))) < "+fields['distance']+" ORDER BY distance desc"
 
 
-    print(query)
+    #print(query)
     cursor.execute(query)
     res = cursor.fetchall()
+    count=0
+    for i in res:
+        count+=1
+    print(count)
     conn.close()
     return res
 
@@ -187,19 +173,12 @@ def distance():
         #print(dic)
 
         if dic:
-            temp=getDistance(dic)
-            if temp:
-                result = getDistanceData(temp)
-            else:
-                result=[]
-                flash('No records of earthquake around that location for that distance')
-
-
+            result = getDistanceData(dic)
         else:
             result=[]
-            flash('Please enter values in the field')
+            flash('No records of earthquake around that location for that distance')
     
-    return render_template('index.html',data=result)
+    return render_template('index.html',data3=result)
 
 
 @app.route('/latlong',methods=['GET','POST'])
